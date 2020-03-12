@@ -7,7 +7,7 @@ def bus():
     bs = BeautifulSoup(url.read(), 'html.parser')
     operacion.execute("SELECT * from pags")
     for pagina, status in operacion.fetchall():
-        if status==0 and str(pagina)[:4]!="http":
+        if status==0  and str(pagina)[:3]=="htt":
             url=urlopen(pagina)
             bs = BeautifulSoup(url.read(), 'html.parser')
             for enlaces in bs.find_all("a"):
@@ -21,6 +21,11 @@ def bus():
             print(com,1)
             operacion.execute(com)
             conexion.commit()
+    com='update pags set status=true where pagina="'+paginap+'"'
+    print(com,2)
+    operacion.execute(com)
+    conexion.commit()            
+    paginap=pagv
     bus()
 paginap=str(input("Introduce la pagina web: "))
 print(paginap)
@@ -36,7 +41,7 @@ conexion.commit()
 for enlaces in bs.find_all("a"):
     print("href: {}".format(enlaces.get("href")))
     pagv="{}".format(enlaces.get("href"))
-    if str(pagv)[:3]=="htt": 
+    if str(pagv)[:3]=="htt":
         com='insert into pags values("'+pagv+'",FALSE);'
         operacion.execute(com)
         conexion.commit()
