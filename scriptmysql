@@ -1,0 +1,3 @@
+create database webs;
+use webs;
+create table pags (pagina text, status boolean);
